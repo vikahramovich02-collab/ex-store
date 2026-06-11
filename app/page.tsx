@@ -18,28 +18,6 @@ export default function HomePage() {
       >
         {/* Большой логотип по центру → уезжает в навбар при скролле */}
         <HeroLogo />
-
-        {/* Большой текст-заявление поверх фото (blend-эффект как у навигации) */}
-        <div
-          className="absolute inset-0 text-white"
-          style={{ mixBlendMode: "difference" }}
-        >
-          {/* Верхний блок */}
-          <h1
-            className="absolute left-6 md:left-10 top-[15%] font-extrabold uppercase tracking-tight leading-[0.92]"
-            style={{ fontSize: "clamp(2.2rem, 7.5vw, 6.5rem)" }}
-          >
-            / Бренд для тех<br />кто остаётся собой
-          </h1>
-
-          {/* Нижний блок */}
-          <h2
-            className="absolute right-6 md:right-10 bottom-[8%] text-right font-extrabold uppercase tracking-tight leading-[0.92]"
-            style={{ fontSize: "clamp(2.2rem, 7.5vw, 6.5rem)" }}
-          >
-            бывшая · бывший /
-          </h2>
-        </div>
       </section>
 
       {/* ─── КОЛЛЕКЦИИ ───────────────────────────────────────── */}
