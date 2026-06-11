@@ -31,21 +31,6 @@ export default function HomePage() {
             ex
           </span>
         </div>
-
-        {/* Bottom-left subtitle + CTA */}
-        <div className="relative z-10 w-full max-w-screen-xl mx-auto px-6 pb-14">
-          <p className="text-white/80 text-sm italic mb-4">бывшие</p>
-          <p className="text-white/60 text-[12px] leading-relaxed mb-7 max-w-[280px]">
-            Белорусский бренд одежды. Женская и мужская линейки — спортивные
-            костюмы и летняя коллекция.
-          </p>
-          <Link
-            href="/female"
-            className="btn-glitch border border-white/60 text-white text-[11px] tracking-[0.22em] font-medium px-7 py-4 hover:bg-white hover:text-black transition-colors"
-          >
-            СМОТРЕТЬ КОЛЛЕКЦИЮ <ArrowRight size={14} />
-          </Link>
-        </div>
       </section>
 
       {/* ─── КОЛЛЕКЦИИ ───────────────────────────────────────── */}
