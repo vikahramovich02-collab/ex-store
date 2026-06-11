@@ -11,14 +11,10 @@ export default function HomePage() {
   return (
     <>
       {/* ─── HERO «бывшие» ───────────────────────────────────── */}
-      <section className="relative h-screen overflow-hidden" style={{ height: "100dvh" }}>
-        {/* Banner photo */}
-        <img
-          src={asset("/hero.jpg")}
-          alt="ex"
-          className="absolute inset-0 w-full h-full object-cover object-center"
-        />
-
+      <section
+        className="relative h-screen overflow-hidden bg-cover bg-center"
+        style={{ height: "100dvh", backgroundImage: `url(${asset("/hero.jpg")})` }}
+      >
         {/* Большой текст-заявление поверх фото (blend-эффект как у навигации) */}
         <div
           className="absolute inset-0 text-white"
