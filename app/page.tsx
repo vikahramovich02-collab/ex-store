@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
+import HeroLogo from "@/components/HeroLogo";
 import { asset } from "@/lib/assets";
 import { byGender, collections } from "@/lib/data";
 
@@ -15,6 +16,9 @@ export default function HomePage() {
         className="relative h-screen overflow-hidden bg-cover bg-center"
         style={{ height: "100dvh", backgroundImage: `url(${asset("/hero.jpg")})` }}
       >
+        {/* Большой логотип по центру → уезжает в навбар при скролле */}
+        <HeroLogo />
+
         {/* Большой текст-заявление поверх фото (blend-эффект как у навигации) */}
         <div
           className="absolute inset-0 text-white"

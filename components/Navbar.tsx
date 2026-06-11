@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { useCart } from "@/lib/cart-context";
 import { asset } from "@/lib/assets";
 
 export default function Navbar() {
   const { count, open } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const isHome = usePathname() === "/";
 
   const leftLinks = [
     { href: "/female", label: "БЫВШАЯ" },
@@ -42,17 +44,19 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* CENTER: logo (инвертирован в белый, блендится как буквы) */}
+        {/* CENTER: logo (на главной его рисует анимированный HeroLogo) */}
         <div className="flex justify-center">
-          <Link href="/" aria-label="ex — на главную" className="block">
-            <img
-              src={asset("/logo.png")}
-              alt="ex"
-              className="h-11 w-auto select-none"
-              style={{ filter: "invert(1)" }}
-              draggable={false}
-            />
-          </Link>
+          {!isHome && (
+            <Link href="/" aria-label="ex — на главную" className="block">
+              <img
+                src={asset("/logo.png")}
+                alt="ex"
+                className="h-11 w-auto select-none"
+                style={{ filter: "invert(1)" }}
+                draggable={false}
+              />
+            </Link>
+          )}
         </div>
 
         {/* RIGHT: корзина / связаться */}
