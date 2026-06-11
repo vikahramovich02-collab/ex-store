@@ -10,26 +10,36 @@ export default function HomePage() {
   return (
     <>
       {/* ─── HERO «бывшие» ───────────────────────────────────── */}
-      <section className="relative h-[88vh] min-h-[520px] flex items-end overflow-hidden">
+      <section className="relative h-[92vh] min-h-[560px] overflow-hidden">
         {/* Banner image placeholder (muted «бывшие» palette) */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(150deg, #b8b2a8 0%, #d8d3ca 40%, #c4beb4 100%)",
+              "linear-gradient(150deg, #b8b2a8 0%, #d8d3ca 45%, #c4beb4 100%)",
           }}
         />
-        <div className="absolute inset-0 bg-black/15" />
-        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/45 to-transparent" />
 
-        {/* Big brand title centered */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <span
-            className="text-white/90 font-semibold lowercase select-none leading-none"
-            style={{ fontSize: "clamp(5rem, 22vw, 18rem)", letterSpacing: "0.05em" }}
+        {/* Большой текст-заявление поверх фото (blend-эффект как у навигации) */}
+        <div
+          className="absolute inset-0 text-white"
+          style={{ mixBlendMode: "difference" }}
+        >
+          {/* Верхний блок */}
+          <h1
+            className="absolute left-6 md:left-10 top-[15%] font-extrabold uppercase tracking-tight leading-[0.92]"
+            style={{ fontSize: "clamp(2.2rem, 7.5vw, 6.5rem)" }}
           >
-            ex
-          </span>
+            / Бренд для тех<br />кто остаётся собой
+          </h1>
+
+          {/* Нижний блок */}
+          <h2
+            className="absolute right-6 md:right-10 bottom-[8%] text-right font-extrabold uppercase tracking-tight leading-[0.92]"
+            style={{ fontSize: "clamp(2.2rem, 7.5vw, 6.5rem)" }}
+          >
+            бывшая · бывший /
+          </h2>
         </div>
       </section>
 
