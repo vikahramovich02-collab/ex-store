@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
+import Newsletter from "@/components/Newsletter";
 import CartDrawer from "@/components/CartDrawer";
 import PageOffset from "@/components/PageOffset";
 import { CartProvider } from "@/lib/cart-context";
@@ -34,6 +35,7 @@ export default function RootLayout({
         <CartProvider>
           <Navbar />
           <PageOffset>{children}</PageOffset>
+          <Newsletter />
           <Footer />
           <CartDrawer />
           <Marquee />
