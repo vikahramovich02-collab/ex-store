@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import Marquee from "@/components/Marquee";
 import ProductCard from "@/components/ProductCard";
 import { byGender, collections } from "@/lib/data";
 
@@ -10,9 +9,6 @@ export default function HomePage() {
 
   return (
     <>
-      {/* ─── MARQUEE ─────────────────────────────────────────── */}
-      <Marquee />
-
       {/* ─── HERO «бывшие» ───────────────────────────────────── */}
       <section className="relative h-[88vh] min-h-[520px] flex items-end overflow-hidden">
         {/* Banner image placeholder (muted «бывшие» palette) */}
@@ -111,58 +107,6 @@ export default function HomePage() {
         href="/male"
         products={male}
       />
-
-      {/* ─── BRAND STORY ─────────────────────────────────────── */}
-      <section className="bg-gray-50 py-20 md:py-28 mt-4">
-        <div className="max-w-screen-xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
-            <div>
-              <p className="text-[10px] tracking-[0.25em] text-gray-400 mb-5 font-medium">
-                О БРЕНДЕ
-              </p>
-              <h2
-                className="font-semibold leading-tight mb-6 tracking-tight"
-                style={{ fontSize: "clamp(1.6rem, 4vw, 2.5rem)" }}
-              >
-                ex — это про тех,
-                <br />
-                кто остаётся собой.
-              </h2>
-              <p className="text-gray-600 text-sm leading-relaxed mb-4">
-                «Бывшие» — не про прошлое, а про честность к себе. Одежда без
-                лишнего: чистые силуэты, спокойная палитра, посадка, в которой
-                комфортно быть.
-              </p>
-              <p className="text-gray-600 text-sm leading-relaxed mb-8">
-                Производство в Беларуси. Небольшие партии, внимание к деталям.
-              </p>
-              <Link
-                href="/about"
-                className="inline-flex items-center gap-2 text-[11px] tracking-[0.2em] font-medium nav-link"
-              >
-                УЗНАТЬ БОЛЬШЕ <ArrowRight size={13} />
-              </Link>
-            </div>
-            <div
-              className="relative flex items-center justify-center overflow-hidden"
-              style={{
-                height: "400px",
-                background: "linear-gradient(135deg, #b8b2a8 0%, #d8d3ca 100%)",
-              }}
-            >
-              <span
-                className="text-white/30 font-semibold lowercase select-none"
-                style={{ fontSize: "clamp(4rem, 12vw, 8rem)" }}
-              >
-                ex
-              </span>
-              <p className="absolute bottom-5 left-5 text-white/50 text-[10px] tracking-[0.2em]">
-                ФОТО СКОРО
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   );
 }

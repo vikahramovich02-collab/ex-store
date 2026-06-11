@@ -91,7 +91,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <>
                 <span className="text-gray-400 line-through">{product.price} BYN</span>
                 <span className="bg-black text-white text-[10px] tracking-[0.1em] px-2 py-1">
-                  ПРЕДЗАКАЗ −15%
+                  ПРЕДЗАКАЗ −10%
                 </span>
               </>
             )}

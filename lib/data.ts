@@ -21,8 +21,8 @@ export type Product = {
   preorder?: boolean; // если true — товар по предзаказу со скидкой
 };
 
-// Размер скидки по предзаказу (общий процент). ⬜ уточнить у Вики.
-export const PREORDER_DISCOUNT = 0.15; // −15%
+// Размер скидки по предзаказу (из макета Figma).
+export const PREORDER_DISCOUNT = 0.1; // −10%
 
 // Цена с учётом предзаказа
 export const finalPrice = (p: Product) =>
@@ -210,7 +210,7 @@ export const collections = [
   {
     slug: "summer",
     title: COLLECTION_SUMMER,
-    subtitle: "Предзаказ −15%",
+    subtitle: "Предзаказ −10%",
     note: "Худи, штаны, шорты и майка с заклёпками.",
   },
 ];

@@ -13,7 +13,7 @@ const typeBg: Record<string, string> = {
 export default function ProductCard({ product }: { product: Product }) {
   const bg = typeBg[product.type] ?? "#cac4bb";
   const price = finalPrice(product);
-  const badge = product.preorder ? "ПРЕДЗАКАЗ −15%" : product.badge;
+  const badge = product.preorder ? "ПРЕДЗАКАЗ −10%" : product.badge;
 
   return (
     <Link href={`/product/${product.slug}`} className="group block">

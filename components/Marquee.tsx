@@ -1,18 +1,18 @@
-// Чёрная бегущая строка про предзаказ. Используется на главной.
+// Чёрная бегущая строка про предзаказ — по макету Figma.
+// «10 % СКИДКА ПО ПРЕДЗАКАЗУ» через звёздочку ★, белым по чёрному.
 export default function Marquee() {
   return (
-    <div className="bg-black py-3 overflow-hidden">
+    <div className="bg-black py-2.5 overflow-hidden">
       <div
-        className="flex whitespace-nowrap"
-        style={{ animation: "marquee 28s linear infinite" }}
+        className="flex items-center whitespace-nowrap"
+        style={{ animation: "marquee 30s linear infinite" }}
       >
-        {Array.from({ length: 8 }).map((_, i) => (
-          <span
-            key={i}
-            className="text-white/85 text-[10px] tracking-[0.3em] font-medium shrink-0 px-8"
-          >
-            ПРЕДЗАКАЗ ОТКРЫТ &nbsp;·&nbsp; −15% ПО ПРЕДЗАКАЗУ &nbsp;·&nbsp; НОВАЯ
-            ЛЕТНЯЯ КОЛЛЕКЦИЯ &nbsp;·&nbsp; ex
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={i} className="flex items-center shrink-0">
+            <span className="text-white text-[10px] tracking-[0.2em] font-medium px-6">
+              10 % СКИДКА ПО ПРЕДЗАКАЗУ
+            </span>
+            <span className="text-white text-[9px]">★</span>
           </span>
         ))}
       </div>
