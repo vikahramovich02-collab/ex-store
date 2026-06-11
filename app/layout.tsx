@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Marquee from "@/components/Marquee";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
+import PageOffset from "@/components/PageOffset";
 import { CartProvider } from "@/lib/cart-context";
 
 const geist = Geist({
@@ -29,13 +30,13 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="ru" className={`${geist.variable}`}>
-      <body>
+      <body style={{ paddingBottom: "2.75rem" }}>
         <CartProvider>
-          <Marquee />
           <Navbar />
-          <main>{children}</main>
+          <PageOffset>{children}</PageOffset>
           <Footer />
           <CartDrawer />
+          <Marquee />
         </CartProvider>
       </body>
     </html>

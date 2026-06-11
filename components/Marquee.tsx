@@ -1,8 +1,8 @@
-// Чёрная бегущая строка про предзаказ — по макету Figma.
+// Чёрная бегущая строка про предзаказ — зафиксирована ВНИЗУ экрана.
 // «10 % СКИДКА ПО ПРЕДЗАКАЗУ» через звёздочку ★, белым по чёрному.
 export default function Marquee() {
   return (
-    <div className="bg-black py-2.5 overflow-hidden">
+    <div className="fixed bottom-0 left-0 right-0 z-50 bg-black py-2.5 overflow-hidden">
       <div
         className="flex items-center whitespace-nowrap"
         style={{ animation: "marquee 30s linear infinite" }}
