@@ -14,7 +14,10 @@ export default function HomePage() {
       {/* ─── HERO «бывшие» ───────────────────────────────────── */}
       <section
         className="relative h-screen overflow-hidden bg-cover bg-center"
-        style={{ height: "100dvh", backgroundImage: `url(${asset("/hero.jpg")})` }}
+        style={{
+          height: "100dvh",
+          backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.5), rgba(0,0,0,0) 150px), url(${asset("/hero.jpg")})`,
+        }}
       >
         {/* Большой логотип по центру → уезжает в навбар при скролле */}
         <HeroLogo />
