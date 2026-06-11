@@ -11,7 +11,7 @@ export default function HomePage() {
   return (
     <>
       {/* ─── HERO «бывшие» ───────────────────────────────────── */}
-      <section className="relative h-[92vh] min-h-[560px] overflow-hidden">
+      <section className="relative h-screen overflow-hidden" style={{ height: "100dvh" }}>
         {/* Banner photo */}
         <img
           src={asset("/hero.jpg")}
