@@ -1,0 +1,6 @@
+1:"$Sreact.fragment"
+2:I[23036,["/ex-store/_next/static/chunks/0be_qa5sl-h1c.js","/ex-store/_next/static/chunks/0d3shmwh5_nmn.js","/ex-store/_next/static/chunks/0zcfry3og9o4l.js"],"default"]
+3:I[97367,["/ex-store/_next/static/chunks/0be_qa5sl-h1c.js","/ex-store/_next/static/chunks/0d3shmwh5_nmn.js"],"OutletBoundary"]
+4:"$Sreact.suspense"
+0:{"rsc":["$","$1","c",{"children":[["$","$L2",null,{"product":{"id":"f-pants-1","slug":"shtany-leto-female","name":"Штаны","price":120,"gender":"female","type":"pants","collection":"Лето 2026","description":"Свободные летние штаны с высокой посадкой. Лёгкая ткань, комфорт в жару.","composition":"70% хлопок, 30% лён. Производство: Беларусь.","sizes":["XS","S","M","L"],"images":["/placeholders/pants-f-1.jpg","/placeholders/pants-f-1b.jpg"],"preorder":true}}],[["$","script","script-0",{"src":"/ex-store/_next/static/chunks/0zcfry3og9o4l.js","async":true}]],["$","$L3",null,{"children":["$","$4",null,{"name":"Next.MetadataOutlet","children":"$@5"}]}]]}],"isPartial":false,"staleTime":300,"varyParams":null,"buildId":"uu4jvinT1ZiABTvRjwajo"}
+5:null
