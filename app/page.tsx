@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import ProductCard from "@/components/ProductCard";
+import { asset } from "@/lib/assets";
 import { byGender, collections } from "@/lib/data";
 
 export default function HomePage() {
@@ -11,13 +12,11 @@ export default function HomePage() {
     <>
       {/* ─── HERO «бывшие» ───────────────────────────────────── */}
       <section className="relative h-[92vh] min-h-[560px] overflow-hidden">
-        {/* Banner image placeholder (muted «бывшие» palette) */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(150deg, #b8b2a8 0%, #d8d3ca 45%, #c4beb4 100%)",
-          }}
+        {/* Banner photo */}
+        <img
+          src={asset("/hero.jpg")}
+          alt="ex"
+          className="absolute inset-0 w-full h-full object-cover object-center"
         />
 
         {/* Большой текст-заявление поверх фото (blend-эффект как у навигации) */}
