@@ -18,7 +18,7 @@ export default function Navbar() {
   const linkCls = "nav-link text-[11px] tracking-[0.18em] font-medium";
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-40">
+    <header className="absolute top-0 left-0 right-0">
       {/* blend-слой: буквы и логотип инвертируются под фоном (mix-blend difference) */}
       <div
         className="max-w-screen-2xl mx-auto px-6 md:px-10 h-[68px] grid grid-cols-3 items-center text-white"
