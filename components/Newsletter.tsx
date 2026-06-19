@@ -28,8 +28,8 @@ export default function Newsletter() {
             <br className="hidden md:block" /> чтобы узнавать о новых дропах
           </h2>
 
-          {/* Form + brand mark */}
-          <div className="flex items-start gap-10 lg:gap-16">
+          {/* Form */}
+          <div className="flex items-start">
             <div className="w-full min-w-[260px] max-w-sm">
               {sent ? (
                 <p className="text-sm text-gray-600 pt-2">
@@ -67,14 +67,6 @@ export default function Newsletter() {
                 </form>
               )}
             </div>
-
-            {/* Brand mark (faded) */}
-            <span
-              className="hidden md:block font-semibold lowercase text-gray-200 select-none leading-none"
-              style={{ fontSize: "clamp(2.5rem, 6vw, 5rem)" }}
-            >
-              ex
-            </span>
           </div>
         </div>
       </div>
