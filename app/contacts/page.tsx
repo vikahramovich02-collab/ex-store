@@ -11,7 +11,7 @@ export default function ContactsPage() {
       </p>
       <div className="flex gap-4 pt-2">
         <a href="https://instagram.com/" target="_blank" rel="noopener noreferrer" className="nav-link font-medium text-black">Instagram</a>
-        <a href="https://t.me/" target="_blank" rel="noopener noreferrer" className="nav-link text-gray-500">Telegram</a>
+        <a href="https://t.me/exxxxby" target="_blank" rel="noopener noreferrer" className="nav-link text-gray-500">Telegram</a>
         <a href="https://tiktok.com/" target="_blank" rel="noopener noreferrer" className="nav-link text-gray-500">TikTok</a>
       </div>
       <p className="text-[11px] text-gray-400 italic pt-6">

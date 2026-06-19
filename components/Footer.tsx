@@ -22,8 +22,7 @@ export default function Footer() {
               {[
                 ["ex female", "/female"],
                 ["ex male", "/male"],
-                ["Спортивные костюмы", "/female?collection=sport"],
-                ["Летняя коллекция", "/female?collection=summer"],
+                ["Спортивные костюмы", "/female"],
               ].map(([label, href]) => (
                 <li key={label}>
                   <Link
@@ -76,7 +75,7 @@ export default function Footer() {
                 Instagram
               </a>
               <a
-                href="https://t.me/"
+                href="https://t.me/exxxxby"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[11px] tracking-wide text-gray-500 hover:text-black transition-colors nav-link w-fit"

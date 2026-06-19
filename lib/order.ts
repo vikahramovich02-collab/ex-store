@@ -1,6 +1,6 @@
 // Куда ведём заказы (пока вместо онлайн-оплаты — в Telegram).
-// ⬜ ЗАМЕНИТЬ на реальный @username бренда (без @).
-export const TELEGRAM_USER = "ex_brand";
+// Аккаунт-менеджер бренда ex.
+export const TELEGRAM_USER = "exxxxby";
 
 // Собирает ссылку на Telegram с готовым текстом заказа.
 export function telegramOrderUrl(text: string) {
