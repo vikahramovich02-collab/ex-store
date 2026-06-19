@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { X, Minus, Plus, Trash2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { asset } from "@/lib/assets";
+import { products } from "@/lib/data";
+
+const imageOf = (id: string) => products.find((p) => p.id === id)?.images[0] ?? "";
+
+function plural(n: number) {
+  const m10 = n % 10;
+  const m100 = n % 100;
+  if (m10 === 1 && m100 !== 11) return "предмет";
+  if (m10 >= 2 && m10 <= 4 && (m100 < 10 || m100 >= 20)) return "предмета";
+  return "предметов";
+}
 
 export default function CartDrawer() {
   const { items, isOpen, close, total, setQty, remove, count } = useCart();
@@ -12,19 +24,22 @@ export default function CartDrawer() {
       {isOpen && <div className="cart-overlay" onClick={close} />}
       <aside className={`cart-drawer ${isOpen ? "open" : ""}`}>
         {/* Header */}
-        <div className="flex items-center justify-between px-5 h-14 border-b border-gray-100 shrink-0">
-          <p className="text-[12px] tracking-[0.2em] font-semibold">
-            КОРЗИНА {count > 0 && `(${count})`}
+        <div className="flex items-center justify-between px-7 h-16 shrink-0">
+          <p className="text-[11px] tracking-[0.15em] text-gray-500 uppercase">
+            {count} {plural(count)} в корзине
           </p>
-          <button onClick={close} aria-label="Закрыть">
-            <X size={20} strokeWidth={1.5} />
+          <button
+            onClick={close}
+            className="text-[11px] tracking-[0.15em] text-gray-500 hover:text-black nav-link"
+          >
+            [ ЗАКРЫТЬ ]
           </button>
         </div>
 
         {/* Items */}
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto px-7">
           {items.length === 0 ? (
-            <div className="h-full flex flex-col items-center justify-center text-center px-6 gap-3">
+            <div className="h-full flex flex-col items-center justify-center text-center gap-3">
               <p className="text-sm text-gray-400">Корзина пуста</p>
               <button
                 onClick={close}
@@ -34,45 +49,45 @@ export default function CartDrawer() {
               </button>
             </div>
           ) : (
-            <ul className="divide-y divide-gray-100">
+            <ul className="space-y-7 py-2">
               {items.map((i) => (
-                <li key={`${i.id}-${i.size}`} className="flex gap-4 p-5">
+                <li key={`${i.id}-${i.size}`} className="flex gap-5">
                   <div
-                    className="w-16 h-20 shrink-0 bg-gray-100"
-                    style={{ background: "linear-gradient(160deg, #cac4bb 0%, #efece7 100%)" }}
+                    className="w-[70px] h-[88px] shrink-0 bg-gray-100 bg-cover bg-center"
+                    style={{ backgroundImage: `url(${asset(imageOf(i.id))})` }}
                   />
                   <div className="flex-1 min-w-0">
-                    <p className="text-[13px] font-medium leading-snug">{i.name}</p>
-                    <p className="text-[11px] text-gray-400 mt-0.5">
-                      Размер: {i.size}
-                      {i.preorder && " · предзаказ"}
-                    </p>
-                    <p className="text-[12px] text-gray-700 mt-1">{i.price} BYN</p>
+                    <div className="flex justify-between gap-3">
+                      <p className="text-[12px] tracking-[0.08em] uppercase text-gray-800">
+                        {i.name}{" "}
+                        <span className="text-gray-400 normal-case">· {i.size}</span>
+                      </p>
+                      <p className="text-[12px] text-gray-800 shrink-0">{i.price * i.qty} BYN</p>
+                    </div>
 
-                    <div className="flex items-center gap-3 mt-2">
-                      <div className="flex items-center border border-gray-200">
+                    <div className="flex justify-between items-center mt-3">
+                      <div className="flex items-center gap-2 text-[12px] text-gray-500">
+                        <span>[ {i.qty} ] ШТ</span>
                         <button
                           onClick={() => setQty(i.id, i.size, i.qty - 1)}
-                          className="px-2 py-1 text-gray-600 hover:text-black"
+                          className="px-1.5 hover:text-black"
                           aria-label="Меньше"
                         >
-                          <Minus size={12} />
+                          −
                         </button>
-                        <span className="px-2 text-[12px] tabular-nums">{i.qty}</span>
                         <button
                           onClick={() => setQty(i.id, i.size, i.qty + 1)}
-                          className="px-2 py-1 text-gray-600 hover:text-black"
+                          className="px-1.5 hover:text-black"
                           aria-label="Больше"
                         >
-                          <Plus size={12} />
+                          +
                         </button>
                       </div>
                       <button
                         onClick={() => remove(i.id, i.size)}
-                        className="text-gray-300 hover:text-black transition-colors"
-                        aria-label="Удалить"
+                        className="text-[11px] tracking-[0.1em] text-gray-400 hover:text-black"
                       >
-                        <Trash2 size={14} />
+                        [ УДАЛИТЬ ]
                       </button>
                     </div>
                   </div>
@@ -82,24 +97,21 @@ export default function CartDrawer() {
           )}
         </div>
 
-        {/* Footer */}
+        {/* Bottom button */}
         {items.length > 0 && (
-          <div className="border-t border-gray-100 p-5 shrink-0 space-y-4">
-            <div className="flex justify-between text-[13px]">
-              <span className="text-gray-500">Итого</span>
-              <span className="font-semibold">{total} BYN</span>
-            </div>
-            <Link
-              href="/checkout"
-              onClick={close}
-              className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-gray-900 transition-colors"
-            >
-              ОФОРМИТЬ ЗАКАЗ
-            </Link>
-            <p className="text-[10px] text-gray-400 text-center leading-relaxed">
-              Оформление заказа — через Telegram.
-            </p>
-          </div>
+          <Link
+            href="/checkout"
+            onClick={close}
+            className="shrink-0 bg-black text-white flex items-center justify-between px-7 py-7 hover:bg-gray-900 transition-colors"
+          >
+            <span className="text-2xl md:text-3xl font-semibold tracking-tight">
+              Оформить заказ
+            </span>
+            <span className="flex items-center gap-4">
+              <span className="text-sm text-white/70">{total} BYN</span>
+              <ArrowRight size={26} strokeWidth={1.5} />
+            </span>
+          </Link>
         )}
       </aside>
     </>

@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { asset } from "@/lib/assets";
-import { setOf, piecesOf, type Gender, type Product } from "@/lib/data";
+import ProductMiniCard from "@/components/ProductMiniCard";
+import { setOf, piecesOf, type Gender } from "@/lib/data";
 
 // Блок раздела: слева костюм (комплект), справа вещи по отдельности.
 // По макету Figma «✕ БЫВШАЯ / БЫВШИЙ».
@@ -9,27 +9,6 @@ const heading: Record<Gender, string> = {
   female: "БЫВШАЯ",
   male: "БЫВШИЙ",
 };
-
-function Item({ product, big = false }: { product: Product; big?: boolean }) {
-  return (
-    <Link href={`/product/${product.slug}`} className="group block">
-      <div
-        className={`relative overflow-hidden bg-gray-100 bg-cover bg-center ${
-          big ? "aspect-[3/4]" : "aspect-[3/4]"
-        }`}
-        style={{ backgroundImage: `url(${asset(product.images[0])})` }}
-      >
-        <div className="absolute inset-0 bg-black/0 group-hover:bg-black/[0.03] transition-colors" />
-      </div>
-      <div className="mt-3">
-        <p className="text-[11px] tracking-[0.12em] uppercase text-gray-700">
-          {product.name}
-        </p>
-        <p className="text-[12px] text-gray-500 mt-0.5">{product.price} BYN</p>
-      </div>
-    </Link>
-  );
-}
 
 export default function GenderBlock({ gender }: { gender: Gender }) {
   const set = setOf(gender);
@@ -53,10 +32,10 @@ export default function GenderBlock({ gender }: { gender: Gender }) {
 
       {/* Слева комплект, справа отдельные вещи */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-        <Item product={set} big />
+        <ProductMiniCard product={set} />
         <div className="grid grid-cols-2 gap-4 md:gap-6 content-start">
           {pieces.map((p) => (
-            <Item key={p.id} product={p} />
+            <ProductMiniCard key={p.id} product={p} />
           ))}
         </div>
       </div>
