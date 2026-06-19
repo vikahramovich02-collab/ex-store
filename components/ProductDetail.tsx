@@ -65,7 +65,7 @@ export default function ProductDetail({ product }: { product: Product }) {
               <button
                 key={s}
                 onClick={() => { setSize(s); setError(false); }}
-                className={`min-w-12 px-4 py-3 text-[12px] border transition-colors ${
+                className={`min-w-[38px] px-2.5 py-1.5 text-[11px] border transition-colors ${
                   size === s ? "bg-black text-white border-black" : "bg-white border-gray-200 hover:border-black"
                 }`}
               >
