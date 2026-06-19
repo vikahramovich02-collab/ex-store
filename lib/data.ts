@@ -46,38 +46,100 @@ export const COLLECTION_SPORT = "Спортивные костюмы";
 export const COLLECTION_SUMMER = "Лето 2026";
 
 export const products: Product[] = [
-  // ── Спортивные костюмы (есть в наличии) — пока единственная позиция ────
+  // ── ЖЕНСКОЕ: костюм (комплект) + худи + штаны по отдельности ───────────
   {
-    id: "f-suit-1",
-    slug: "sportivnyy-kostyum-grey-female",
+    id: "f-suit",
+    slug: "kostyum-female",
     name: "Спортивный костюм",
-    price: 220,
+    price: 222,
     gender: "female",
     type: "suit",
     collection: COLLECTION_SPORT,
     description:
-      "Свободный спортивный костюм: худи и джоггеры. Мягкий футер, посадка oversize. Базовая вещь линейки ex female — носится как комплект и по отдельности.",
+      "Женский спортивный костюм: худи и штаны. Мягкий футер, посадка oversize. Можно взять комплектом или каждую вещь отдельно.",
     composition: "80% хлопок, 20% полиэстер. Производство: Беларусь.",
     sizes: ["XS", "S", "M", "L"],
-    images: ["/placeholders/suit-f-1.jpg", "/placeholders/suit-f-1b.jpg"],
-    badge: "В НАЛИЧИИ",
+    images: ["/products/female-suit.jpg"],
   },
   {
-    id: "m-suit-1",
-    slug: "sportivnyy-kostyum-grey-male",
+    id: "f-hoodie",
+    slug: "hudi-female",
+    name: "Спортивное худи",
+    price: 111,
+    gender: "female",
+    type: "hoodie",
+    collection: COLLECTION_SPORT,
+    description:
+      "Женское спортивное худи из мягкого футера, посадка oversize. Часть костюма — носится отдельно.",
+    composition: "80% хлопок, 20% полиэстер. Производство: Беларусь.",
+    sizes: ["XS", "S", "M", "L"],
+    images: ["/products/female-hoodie.jpg"],
+  },
+  {
+    id: "f-pants",
+    slug: "shtany-female",
+    name: "Спортивные штаны",
+    price: 111,
+    gender: "female",
+    type: "pants",
+    collection: COLLECTION_SPORT,
+    description:
+      "Женские спортивные штаны, свободный крой. Часть костюма — носятся отдельно.",
+    composition: "80% хлопок, 20% полиэстер. Производство: Беларусь.",
+    sizes: ["XS", "S", "M", "L"],
+    images: ["/products/female-pants.jpg"],
+  },
+
+  // ── МУЖСКОЕ: костюм (комплект) + худи + штаны по отдельности ───────────
+  {
+    id: "m-suit",
+    slug: "kostyum-male",
     name: "Спортивный костюм",
     price: 240,
     gender: "male",
     type: "suit",
     collection: COLLECTION_SPORT,
     description:
-      "Мужской спортивный костюм свободного кроя: худи и джоггеры из плотного футера. Чистый силуэт, без лишних деталей. Линейка ex male.",
+      "Мужской спортивный костюм: худи и штаны из плотного футера. Чистый силуэт. Можно взять комплектом или отдельно.",
     composition: "80% хлопок, 20% полиэстер. Производство: Беларусь.",
     sizes: ["S", "M", "L", "XL"],
-    images: ["/placeholders/suit-m-1.jpg", "/placeholders/suit-m-1b.jpg"],
-    badge: "В НАЛИЧИИ",
+    images: ["/products/male-suit.jpg"],
+  },
+  {
+    id: "m-hoodie",
+    slug: "hudi-male",
+    name: "Спортивное худи",
+    price: 120,
+    gender: "male",
+    type: "hoodie",
+    collection: COLLECTION_SPORT,
+    description:
+      "Мужское спортивное худи из плотного футера. Часть костюма — носится отдельно.",
+    composition: "80% хлопок, 20% полиэстер. Производство: Беларусь.",
+    sizes: ["S", "M", "L", "XL"],
+    images: ["/products/male-hoodie.jpg"],
+  },
+  {
+    id: "m-pants",
+    slug: "shtany-male",
+    name: "Спортивные штаны",
+    price: 120,
+    gender: "male",
+    type: "pants",
+    collection: COLLECTION_SPORT,
+    description:
+      "Мужские спортивные штаны, прямой силуэт. Часть костюма — носятся отдельно.",
+    composition: "80% хлопок, 20% полиэстер. Производство: Беларусь.",
+    sizes: ["S", "M", "L", "XL"],
+    images: ["/products/male-pants.jpg"],
   },
 ];
+
+// Хелперы для блоков «бывшая/бывший»: комплект + отдельные вещи
+export const setOf = (g: Gender) =>
+  products.find((p) => p.gender === g && p.type === "suit");
+export const piecesOf = (g: Gender) =>
+  products.filter((p) => p.gender === g && p.type !== "suit");
 
 export const collections = [
   {

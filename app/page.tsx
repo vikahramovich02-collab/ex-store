@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HeroLogo from "@/components/HeroLogo";
+import GenderBlock from "@/components/GenderBlock";
 import { asset } from "@/lib/assets";
 
 export default function HomePage() {
@@ -42,6 +43,10 @@ export default function HomePage() {
           </Link>
         ))}
       </section>
+
+      {/* ─── Блоки бывшая / бывший (костюм + вещи отдельно) ─────── */}
+      <GenderBlock gender="female" />
+      <GenderBlock gender="male" />
     </>
   );
 }
