@@ -66,7 +66,6 @@ export default function HeroLogo() {
         left: "50%",
         width: "380px",
         willChange: "top, left, width",
-        mixBlendMode: "difference",
       }}
     >
       <img

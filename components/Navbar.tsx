@@ -21,10 +21,11 @@ export default function Navbar() {
 
   return (
     <header className="absolute top-0 left-0 right-0">
-      {/* blend-слой: буквы и логотип инвертируются под фоном (mix-blend difference) */}
+      {/* На главной — белые буквы поверх фото, на остальных — чёрные */}
       <div
-        className="max-w-screen-2xl mx-auto px-6 md:px-10 h-[68px] grid grid-cols-3 items-center text-white"
-        style={{ mixBlendMode: "difference" }}
+        className={`max-w-screen-2xl mx-auto px-6 md:px-10 h-[68px] grid grid-cols-3 items-center ${
+          isHome ? "text-white" : "text-black"
+        }`}
       >
         {/* LEFT: бывшая / бывший (desktop) · burger (mobile) */}
         <div className="flex items-center gap-8">
@@ -52,7 +53,6 @@ export default function Navbar() {
                 src={asset("/logo.png")}
                 alt="ex"
                 className="h-11 w-auto select-none"
-                style={{ filter: "invert(1)" }}
                 draggable={false}
               />
             </Link>
