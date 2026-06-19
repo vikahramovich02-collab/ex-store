@@ -6,7 +6,7 @@ import { ArrowUpRight } from "lucide-react";
 // Блок подписки на рассылку перед футером — белый.
 export default function Newsletter() {
   const [email, setEmail] = useState("");
-  const [consent, setConsent] = useState(false);
+  const [consent, setConsent] = useState(true);
   const [sent, setSent] = useState(false);
 
   const submit = (e: React.FormEvent) => {
