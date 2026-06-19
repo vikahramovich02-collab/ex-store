@@ -35,7 +35,7 @@ export default function CatalogView({ gender }: { gender: Gender }) {
   );
 
   return (
-    <div className="max-w-screen-xl mx-auto px-6 py-12">
+    <div className="px-5 py-12">
       {/* Heading */}
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-semibold tracking-tight lowercase">

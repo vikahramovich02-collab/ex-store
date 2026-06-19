@@ -50,7 +50,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto px-6 py-8">
+    <div className="px-5 py-8">
       <Link
         href={product.gender === "female" ? "/female" : "/male"}
         className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-gray-500 hover:text-black mb-6"

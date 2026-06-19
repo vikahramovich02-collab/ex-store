@@ -86,7 +86,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="max-w-screen-xl mx-auto px-6 py-12">
+    <div className="px-5 py-12">
       <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
         Оформление заказа
       </h1>

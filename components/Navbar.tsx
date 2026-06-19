@@ -23,7 +23,7 @@ export default function Navbar() {
     <header className="absolute top-0 left-0 right-0">
       {/* На главной — белые буквы поверх фото, на остальных — чёрные */}
       <div
-        className={`max-w-screen-2xl mx-auto px-6 md:px-10 h-[68px] grid grid-cols-3 items-center ${
+        className={`px-5 h-[68px] grid grid-cols-3 items-center ${
           isHome ? "text-white" : "text-black"
         }`}
       >

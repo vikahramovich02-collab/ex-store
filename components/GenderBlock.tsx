@@ -16,7 +16,7 @@ export default function GenderBlock({ gender }: { gender: Gender }) {
   if (!set) return null;
 
   return (
-    <section className="max-w-screen-2xl mx-auto px-6 md:px-10 py-14 md:py-20">
+    <section className="px-5 py-14 md:py-20">
       {/* Заголовок */}
       <div className="flex items-end justify-between mb-8">
         <h2 className="flex items-center gap-3 text-xl md:text-2xl font-semibold tracking-tight uppercase">

@@ -17,7 +17,7 @@ export default function Newsletter() {
 
   return (
     <section className="bg-white border-t border-gray-200">
-      <div className="max-w-screen-2xl mx-auto px-6 md:px-10 py-16 md:py-24">
+      <div className="px-5 py-16 md:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 lg:gap-20 items-end">
           {/* Heading */}
           <h2
