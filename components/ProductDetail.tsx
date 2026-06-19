@@ -2,149 +2,80 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Plus, Minus } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import ProductMiniCard from "@/components/ProductMiniCard";
 import { telegramOrderUrl } from "@/lib/order";
-import { finalPrice, type Product } from "@/lib/data";
-
-const typeBg: Record<string, string> = {
-  suit: "#c9c4bd",
-  hoodie: "#bcb4a8",
-  pants: "#b6b1a8",
-  shorts: "#c7c0b4",
-  top: "#cfc8bd",
-};
+import { asset } from "@/lib/assets";
+import { finalPrice, products, type Product } from "@/lib/data";
 
 export default function ProductDetail({ product }: { product: Product }) {
   const { add } = useCart();
   const [size, setSize] = useState<string | null>(null);
   const [error, setError] = useState(false);
-  const [active, setActive] = useState(0);
-
   const price = finalPrice(product);
-  const bg = typeBg[product.type] ?? "#cac4bb";
+
+  const related = products.filter((p) => p.gender === product.gender && p.id !== product.id);
 
   const onAdd = () => {
-    if (!size) {
-      setError(true);
-      return;
-    }
-    add({
-      id: product.id,
-      slug: product.slug,
-      name: product.name,
-      price,
-      size,
-      qty: 1,
-      preorder: product.preorder,
-    });
+    if (!size) return setError(true);
+    add({ id: product.id, slug: product.slug, name: product.name, price, size, qty: 1, preorder: product.preorder });
   };
 
   const orderInTelegram = () => {
-    if (!size) {
-      setError(true);
-      return;
-    }
+    if (!size) return setError(true);
     const text = `Здравствуйте! Хочу заказать на сайте ex:\n• ${product.name} — размер ${size} — ${price} BYN`;
     window.open(telegramOrderUrl(text), "_blank");
   };
 
   return (
-    <div className="px-5 py-8">
+    <div className="px-5 py-6">
       <Link
         href={product.gender === "female" ? "/female" : "/male"}
-        className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-gray-500 hover:text-black mb-6"
+        className="inline-flex items-center gap-2 text-[11px] tracking-[0.15em] text-gray-500 hover:text-black mb-5"
       >
         <ArrowLeft size={14} /> НАЗАД
       </Link>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14">
-        {/* Gallery */}
-        <div>
-          <div
-            className="aspect-[3/4] w-full"
-            style={{ background: `linear-gradient(160deg, ${bg} 0%, #efece7 100%)` }}
-          >
-            <div className="h-full flex items-end p-5">
-              <span className="text-white/40 text-[11px] tracking-[0.2em]">
-                ФОТО СКОРО · {active + 1}
-              </span>
-            </div>
-          </div>
-          <div className="flex gap-2 mt-2">
-            {product.images.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={`w-16 h-20 transition-opacity ${
-                  active === i ? "ring-1 ring-black" : "opacity-60"
-                }`}
-                style={{ background: `linear-gradient(160deg, ${bg} 0%, #efece7 100%)` }}
-                aria-label={`Фото ${i + 1}`}
-              />
-            ))}
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-start">
+        {/* Left: фото-галерея (скроллится) */}
+        <div className="space-y-2">
+          {product.images.map((img, i) => (
+            <div
+              key={i}
+              className="aspect-[3/4] w-full bg-gray-100 bg-cover bg-center"
+              style={{ backgroundImage: `url(${asset(img)})` }}
+            />
+          ))}
         </div>
 
-        {/* Info */}
-        <div className="md:pt-2">
-          <p className="text-[11px] tracking-[0.15em] text-gray-400 mb-2">
-            {product.collection}
-          </p>
-          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-3">
-            {product.name}
-          </h1>
+        {/* Right: залипающая панель */}
+        <div className="md:sticky md:top-6 self-start">
+          <p className="text-[11px] tracking-[0.15em] text-gray-400 mb-2">{product.collection}</p>
+          <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-3">{product.name}</h1>
+          <p className="text-xl font-medium mb-6">{price} BYN</p>
 
-          <div className="flex items-center gap-3 mb-1">
-            <span className="text-xl font-medium">{price} BYN</span>
-            {product.preorder && (
-              <>
-                <span className="text-gray-400 line-through">{product.price} BYN</span>
-                <span className="bg-black text-white text-[10px] tracking-[0.1em] px-2 py-1">
-                  ПРЕДЗАКАЗ −10%
-                </span>
-              </>
-            )}
-          </div>
-          {product.preorder && (
-            <p className="text-[12px] text-gray-500 mb-6">
-              Полная оплата со скидкой. Отгрузка после пошива партии.
-            </p>
-          )}
-          {!product.preorder && <div className="mb-6" />}
-
-          {/* Sizes */}
+          {/* Размеры */}
           <p className="text-[11px] tracking-[0.15em] text-gray-500 mb-3">РАЗМЕР</p>
           <div className="flex flex-wrap gap-2 mb-2">
             {product.sizes.map((s) => (
               <button
                 key={s}
-                onClick={() => {
-                  setSize(s);
-                  setError(false);
-                }}
+                onClick={() => { setSize(s); setError(false); }}
                 className={`min-w-12 px-4 py-3 text-[12px] border transition-colors ${
-                  size === s
-                    ? "bg-black text-white border-black"
-                    : "bg-white border-gray-200 hover:border-black"
+                  size === s ? "bg-black text-white border-black" : "bg-white border-gray-200 hover:border-black"
                 }`}
               >
                 {s}
               </button>
             ))}
           </div>
-          {error && (
-            <p className="text-[11px] text-red-500 mb-2">Выберите размер</p>
-          )}
-
-          <Link
-            href="/sizes"
-            className="inline-block text-[11px] text-gray-400 hover:text-black underline underline-offset-2 mb-6"
-          >
+          {error && <p className="text-[11px] text-red-500 mb-2">Выберите размер</p>}
+          <Link href="/sizes" className="inline-block text-[11px] text-gray-400 hover:text-black underline underline-offset-2 mb-6">
             Таблица размеров
           </Link>
 
-          {/* Заказ */}
+          {/* Кнопки */}
           <button
             onClick={orderInTelegram}
             className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-gray-900 transition-colors mb-2"
@@ -158,18 +89,62 @@ export default function ProductDetail({ product }: { product: Product }) {
             ДОБАВИТЬ В КОРЗИНУ
           </button>
 
-          {/* Description */}
-          <div className="space-y-4 border-t border-gray-100 pt-6">
-            <p className="text-sm text-gray-600 leading-relaxed">
-              {product.description}
-            </p>
-            <div className="flex items-start gap-2 text-[12px] text-gray-500">
-              <Check size={14} className="mt-0.5 shrink-0 text-gray-400" />
-              <span>{product.composition}</span>
-            </div>
+          {/* Раскрывающиеся плашки */}
+          <div className="border-t border-gray-200">
+            <Accordion title="ОПИСАНИЕ ТОВАРА" defaultOpen>
+              <p>{product.description}</p>
+            </Accordion>
+            <Accordion title="СОСТАВ И УХОД">
+              <p>{product.composition}</p>
+              <p className="mt-2 text-gray-400">Стирка при 30°, не отбеливать, гладить при низкой температуре.</p>
+            </Accordion>
+            <Accordion title="ДОСТАВКА И ОПЛАТА">
+              <p>Европочта / Белпочта по всей Беларуси, Яндекс Доставка по Минску, самовывоз.</p>
+              <p className="mt-2">Оформление заказа — заявка через сайт, мы свяжемся с вами в Telegram и договоримся об оплате и доставке.</p>
+            </Accordion>
           </div>
         </div>
       </div>
+
+      {/* Дополните образ */}
+      {related.length > 0 && (
+        <section className="mt-16 md:mt-24">
+          <h2 className="text-lg md:text-xl font-semibold tracking-tight uppercase mb-6">
+            Дополните образ
+          </h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+            {related.map((p) => (
+              <ProductMiniCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function Accordion({
+  title,
+  children,
+  defaultOpen = false,
+}: {
+  title: string;
+  children: React.ReactNode;
+  defaultOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+  return (
+    <div className="border-b border-gray-200">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className="w-full flex items-center justify-between py-5 text-left"
+      >
+        <span className="text-[12px] tracking-[0.12em] font-medium">{title}</span>
+        {open ? <Minus size={16} strokeWidth={1.5} /> : <Plus size={16} strokeWidth={1.5} />}
+      </button>
+      {open && (
+        <div className="pb-5 text-[13px] text-gray-600 leading-relaxed">{children}</div>
+      )}
     </div>
   );
 }
