@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
-import { telegramOrderUrl } from "@/lib/order";
+import { sendOrder } from "@/lib/order";
 
 const DELIVERY = [
   { id: "europochta", label: "Европочта / Белпочта", note: "по всей Беларуси, до отделения", price: 7 },
@@ -14,38 +14,69 @@ const DELIVERY = [
 export default function CheckoutPage() {
   const { items, total, count, clear } = useCart();
   const [delivery, setDelivery] = useState("europochta");
-  const [agree, setAgree] = useState(false);
-  const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", comment: "" });
+  const [agree, setAgree] = useState(true);
+  const [sent, setSent] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [form, setForm] = useState({ name: "", phone: "", telegram: "", address: "", comment: "" });
 
   const deliveryInfo = DELIVERY.find((d) => d.id === delivery);
   const deliveryPrice = deliveryInfo?.price ?? 0;
   const grandTotal = total + (count > 0 ? deliveryPrice : 0);
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
-  const canSend = count > 0 && form.name && form.phone && agree;
+  const canSend = count > 0 && form.name && form.phone && form.telegram && agree;
 
-  const sendToTelegram = () => {
-    if (!canSend) return;
-    const lines = [
-      "Здравствуйте! Хочу оформить заказ на сайте ex:",
+  const submit = async () => {
+    if (!canSend || busy) return;
+    setBusy(true);
+    const text = [
+      "🛍 Новая заявка с сайта ex",
       "",
       ...items.map((i) => `• ${i.name} — размер ${i.size}, ×${i.qty} — ${i.price * i.qty} BYN`),
       "",
       `Имя: ${form.name}`,
       `Телефон: ${form.phone}`,
-      form.email ? `Email: ${form.email}` : "",
+      `Telegram: ${form.telegram}`,
       `Доставка: ${deliveryInfo?.label}${form.address ? `, ${form.address}` : ""}`,
       form.comment ? `Комментарий: ${form.comment}` : "",
       "",
       `Итого: ${grandTotal} BYN (товары ${total} + доставка ${deliveryPrice})`,
-    ].filter(Boolean);
-    window.open(telegramOrderUrl(lines.join("\n")), "_blank");
+    ].filter(Boolean).join("\n");
+
+    await sendOrder({
+      name: form.name,
+      phone: form.phone,
+      telegram: form.telegram,
+      delivery: deliveryInfo?.label ?? "",
+      address: form.address,
+      comment: form.comment,
+      text,
+    });
     clear();
+    setSent(true);
+    setBusy(false);
   };
+
+  if (sent) {
+    return (
+      <div className="max-w-xl mx-auto px-6 py-24 text-center">
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-4">
+          Заявка отправлена 🤍
+        </h1>
+        <p className="text-gray-600 text-sm leading-relaxed mb-8">
+          Спасибо! Мы свяжемся с тобой в Telegram, подтвердим наличие и размер,
+          договоримся об оплате и вызовем доставку.
+        </p>
+        <Link href="/" className="text-[11px] tracking-[0.15em] font-medium nav-link">
+          НА ГЛАВНУЮ
+        </Link>
+      </div>
+    );
+  }
 
   if (count === 0) {
     return (
-      <div className="max-w-screen-xl mx-auto px-6 py-24 text-center">
+      <div className="max-w-xl mx-auto px-6 py-24 text-center">
         <p className="text-lg text-gray-400 mb-4">Корзина пуста</p>
         <Link href="/female" className="text-[11px] tracking-[0.15em] font-medium nav-link">
           ВЕРНУТЬСЯ В КАТАЛОГ
@@ -56,14 +87,17 @@ export default function CheckoutPage() {
 
   return (
     <div className="max-w-screen-xl mx-auto px-6 py-12">
-      <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-10">
+      <h1 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">
         Оформление заказа
       </h1>
+      <p className="text-[13px] text-gray-500 mb-10 max-w-lg">
+        Оставь свои данные и Telegram — мы напишем тебе, подтвердим заказ,
+        договоримся об оплате и доставке.
+      </p>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_360px] gap-12">
         {/* Left: form */}
         <div className="space-y-10">
-          {/* Contacts */}
           <section>
             <p className="text-[11px] tracking-[0.2em] text-gray-400 font-semibold mb-4">
               1 · КОНТАКТЫ
@@ -71,11 +105,10 @@ export default function CheckoutPage() {
             <div className="space-y-3">
               <Field label="Имя и фамилия *" value={form.name} onChange={(v) => set("name", v)} />
               <Field label="Телефон *" value={form.phone} onChange={(v) => set("phone", v)} placeholder="+375" />
-              <Field label="Email" value={form.email} onChange={(v) => set("email", v)} />
+              <Field label="Telegram * (для связи)" value={form.telegram} onChange={(v) => set("telegram", v)} placeholder="@username" />
             </div>
           </section>
 
-          {/* Delivery */}
           <section>
             <p className="text-[11px] tracking-[0.2em] text-gray-400 font-semibold mb-4">
               2 · ДОСТАВКА
@@ -118,7 +151,6 @@ export default function CheckoutPage() {
             )}
           </section>
 
-          {/* Comment */}
           <section>
             <p className="text-[11px] tracking-[0.2em] text-gray-400 font-semibold mb-4">
               3 · КОММЕНТАРИЙ
@@ -150,8 +182,8 @@ export default function CheckoutPage() {
           </div>
 
           <p className="text-[11px] text-gray-500 leading-relaxed bg-gray-50 p-3">
-            Заказ оформляется через Telegram — после нажатия откроется чат с
-            готовым сообщением. Там подтвердим наличие, доставку и оплату.
+            Оплата и доставка — после того как мы свяжемся с тобой в Telegram и
+            подтвердим заказ.
           </p>
 
           <label className="flex items-start gap-2 text-[11px] text-gray-500 leading-relaxed cursor-pointer">
@@ -159,8 +191,11 @@ export default function CheckoutPage() {
               type="checkbox"
               checked={agree}
               onChange={(e) => setAgree(e.target.checked)}
-              className="mt-0.5 accent-black"
+              className="sr-only peer"
             />
+            <span className="mt-0.5 w-4 h-4 border border-gray-400 rounded-[3px] flex items-center justify-center text-black shrink-0">
+              {agree && <CheckMark />}
+            </span>
             <span>
               Согласен с{" "}
               <Link href="/offer" className="underline">публичной офертой</Link> и{" "}
@@ -169,18 +204,26 @@ export default function CheckoutPage() {
           </label>
 
           <button
-            disabled={!canSend}
-            onClick={sendToTelegram}
+            disabled={!canSend || busy}
+            onClick={submit}
             className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-900 transition-colors"
           >
-            ОФОРМИТЬ В TELEGRAM
+            {busy ? "ОТПРАВЛЯЕМ…" : "ОТПРАВИТЬ ЗАЯВКУ"}
           </button>
           <p className="text-[10px] text-gray-400 text-center">
-            Подтверждение заказа и оплата — в Telegram
+            Мы напишем тебе в Telegram для подтверждения
           </p>
         </aside>
       </div>
     </div>
+  );
+}
+
+function CheckMark() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
   );
 }
 
