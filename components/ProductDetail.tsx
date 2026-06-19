@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, Plus, Minus, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import ProductMiniCard from "@/components/ProductMiniCard";
-import { telegramOrderUrl } from "@/lib/order";
 import { asset } from "@/lib/assets";
 import { finalPrice, products, type Product } from "@/lib/data";
 
@@ -18,15 +17,23 @@ export default function ProductDetail({ product }: { product: Product }) {
 
   const related = products.filter((p) => p.gender === product.gender && p.id !== product.id);
 
+  // Галерея: реальные фото, либо 4 заглушки интересной композицией.
+  const gallery =
+    product.images.length > 1
+      ? product.images
+      : [product.images[0], product.images[0], product.images[0], product.images[0]];
+
+  // плитки композиции: класс раскладки + оттенок заглушки
+  const tiles = [
+    { span: "col-span-2 aspect-[4/5]", tone: "#eeeeee" },
+    { span: "aspect-[3/4]", tone: "#f1f1f1" },
+    { span: "aspect-[3/4]", tone: "#ebebeb" },
+    { span: "col-span-2 aspect-[16/10]", tone: "#f3f3f3" },
+  ];
+
   const onAdd = () => {
     if (!size) return setError(true);
     add({ id: product.id, slug: product.slug, name: product.name, price, size, qty: 1, preorder: product.preorder });
-  };
-
-  const orderInTelegram = () => {
-    if (!size) return setError(true);
-    const text = `Здравствуйте! Хочу заказать на сайте ex:\n• ${product.name} — размер ${size} — ${price} BYN`;
-    window.open(telegramOrderUrl(text), "_blank");
   };
 
   return (
@@ -39,14 +46,17 @@ export default function ProductDetail({ product }: { product: Product }) {
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-start">
-        {/* Left: фото-галерея (скроллится, клик → увеличить) */}
-        <div className="space-y-2">
-          {product.images.map((img, i) => (
+        {/* Left: фото-галерея композицией (клик → увеличить) */}
+        <div className="grid grid-cols-2 gap-2">
+          {tiles.map((t, i) => (
             <button
               key={i}
               onClick={() => setLightbox(i)}
-              className="block w-full aspect-[3/4] bg-gray-100 bg-cover bg-center cursor-zoom-in"
-              style={{ backgroundImage: `url(${asset(img)})` }}
+              className={`${t.span} bg-cover bg-center cursor-zoom-in`}
+              style={{
+                backgroundColor: t.tone,
+                backgroundImage: gallery[i] ? `url(${asset(gallery[i])})` : undefined,
+              }}
               aria-label={`Увеличить фото ${i + 1}`}
             />
           ))}
@@ -78,16 +88,10 @@ export default function ProductDetail({ product }: { product: Product }) {
             Таблица размеров
           </Link>
 
-          {/* Кнопки */}
-          <button
-            onClick={orderInTelegram}
-            className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-gray-900 transition-colors mb-2"
-          >
-            ЗАКАЗАТЬ В TELEGRAM
-          </button>
+          {/* Кнопка */}
           <button
             onClick={onAdd}
-            className="btn-glitch w-full justify-center border border-black text-black text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-black hover:text-white transition-colors mb-6"
+            className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-gray-900 transition-colors mb-6"
           >
             ДОБАВИТЬ В КОРЗИНУ
           </button>
@@ -125,7 +129,7 @@ export default function ProductDetail({ product }: { product: Product }) {
 
       {lightbox !== null && (
         <Lightbox
-          images={product.images}
+          images={gallery}
           index={lightbox}
           setIndex={setLightbox}
           onClose={() => setLightbox(null)}
