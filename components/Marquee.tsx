@@ -10,7 +10,7 @@ export default function Marquee() {
         {Array.from({ length: 10 }).map((_, i) => (
           <span key={i} className="flex items-center shrink-0">
             <span className="text-white text-[10px] tracking-[0.2em] font-medium px-6">
-              10 % СКИДКА ПО ПРЕДЗАКАЗУ
+              ex · БЫВШАЯ · БЫВШИЙ · ЗАКАЗ В TELEGRAM
             </span>
             <span className="text-white text-[9px]">★</span>
           </span>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useCart } from "@/lib/cart-context";
+import { telegramOrderUrl } from "@/lib/order";
 
 const DELIVERY = [
   { id: "europochta", label: "Европочта / Белпочта", note: "по всей Беларуси, до отделения", price: 7 },
@@ -11,17 +12,36 @@ const DELIVERY = [
 ];
 
 export default function CheckoutPage() {
-  const { items, total, count } = useCart();
+  const { items, total, count, clear } = useCart();
   const [delivery, setDelivery] = useState("europochta");
   const [agree, setAgree] = useState(false);
   const [form, setForm] = useState({ name: "", phone: "", email: "", address: "", comment: "" });
 
-  const deliveryPrice = DELIVERY.find((d) => d.id === delivery)?.price ?? 0;
+  const deliveryInfo = DELIVERY.find((d) => d.id === delivery);
+  const deliveryPrice = deliveryInfo?.price ?? 0;
   const grandTotal = total + (count > 0 ? deliveryPrice : 0);
-  const hasPreorder = items.some((i) => i.preorder);
 
   const set = (k: string, v: string) => setForm((f) => ({ ...f, [k]: v }));
-  const canPay = count > 0 && form.name && form.phone && agree;
+  const canSend = count > 0 && form.name && form.phone && agree;
+
+  const sendToTelegram = () => {
+    if (!canSend) return;
+    const lines = [
+      "Здравствуйте! Хочу оформить заказ на сайте ex:",
+      "",
+      ...items.map((i) => `• ${i.name} — размер ${i.size}, ×${i.qty} — ${i.price * i.qty} BYN`),
+      "",
+      `Имя: ${form.name}`,
+      `Телефон: ${form.phone}`,
+      form.email ? `Email: ${form.email}` : "",
+      `Доставка: ${deliveryInfo?.label}${form.address ? `, ${form.address}` : ""}`,
+      form.comment ? `Комментарий: ${form.comment}` : "",
+      "",
+      `Итого: ${grandTotal} BYN (товары ${total} + доставка ${deliveryPrice})`,
+    ].filter(Boolean);
+    window.open(telegramOrderUrl(lines.join("\n")), "_blank");
+    clear();
+  };
 
   if (count === 0) {
     return (
@@ -129,12 +149,10 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {hasPreorder && (
-            <p className="text-[11px] text-gray-500 leading-relaxed bg-gray-50 p-3">
-              В заказе есть позиции по предзаказу — полная оплата сейчас со скидкой,
-              отгрузка после пошива партии.
-            </p>
-          )}
+          <p className="text-[11px] text-gray-500 leading-relaxed bg-gray-50 p-3">
+            Заказ оформляется через Telegram — после нажатия откроется чат с
+            готовым сообщением. Там подтвердим наличие, доставку и оплату.
+          </p>
 
           <label className="flex items-start gap-2 text-[11px] text-gray-500 leading-relaxed cursor-pointer">
             <input
@@ -151,14 +169,14 @@ export default function CheckoutPage() {
           </label>
 
           <button
-            disabled={!canPay}
-            onClick={() => alert("Здесь подключим оплату bePaid (карты + ЕРИП).")}
+            disabled={!canSend}
+            onClick={sendToTelegram}
             className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-900 transition-colors"
           >
-            ПЕРЕЙТИ К ОПЛАТЕ
+            ОФОРМИТЬ В TELEGRAM
           </button>
           <p className="text-[10px] text-gray-400 text-center">
-            Оплата картой Visa / Mastercard / Белкарт или через ЕРИП
+            Подтверждение заказа и оплата — в Telegram
           </p>
         </aside>
       </div>

@@ -28,6 +28,7 @@ export default function CatalogView({ gender }: { gender: Gender }) {
 
   const all = byGender(gender);
   const types = Array.from(new Set(all.map((p) => p.type))) as ProductType[];
+  const cols = Array.from(new Set(all.map((p) => p.collection)));
 
   const filtered = all.filter(
     (p) => (!type || p.type === type) && (!collection || p.collection === collection)
@@ -45,29 +46,33 @@ export default function CatalogView({ gender }: { gender: Gender }) {
         </p>
       </div>
 
-      {/* Filters: collection */}
-      <div className="flex flex-wrap gap-2 mb-3">
-        <Chip active={!collection} onClick={() => setCollection(null)}>
-          Все коллекции
-        </Chip>
-        {[COLLECTION_SPORT, COLLECTION_SUMMER].map((c) => (
-          <Chip key={c} active={collection === c} onClick={() => setCollection(c)}>
-            {c}
+      {/* Filters: collection (только если коллекций больше одной) */}
+      {cols.length > 1 && (
+        <div className="flex flex-wrap gap-2 mb-3">
+          <Chip active={!collection} onClick={() => setCollection(null)}>
+            Все коллекции
           </Chip>
-        ))}
-      </div>
+          {cols.map((c) => (
+            <Chip key={c} active={collection === c} onClick={() => setCollection(c)}>
+              {c}
+            </Chip>
+          ))}
+        </div>
+      )}
 
-      {/* Filters: type */}
-      <div className="flex flex-wrap gap-2 mb-10">
-        <Chip active={!type} onClick={() => setType(null)}>
-          Всё
-        </Chip>
-        {types.map((t) => (
-          <Chip key={t} active={type === t} onClick={() => setType(t)}>
-            {typeLabels[t]}
+      {/* Filters: type (только если типов больше одного) */}
+      {types.length > 1 && (
+        <div className="flex flex-wrap gap-2 mb-10">
+          <Chip active={!type} onClick={() => setType(null)}>
+            Всё
           </Chip>
-        ))}
-      </div>
+          {types.map((t) => (
+            <Chip key={t} active={type === t} onClick={() => setType(t)}>
+              {typeLabels[t]}
+            </Chip>
+          ))}
+        </div>
+      )}
 
       {/* Grid */}
       {filtered.length === 0 ? (

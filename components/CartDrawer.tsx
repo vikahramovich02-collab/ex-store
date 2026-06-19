@@ -97,7 +97,7 @@ export default function CartDrawer() {
               ОФОРМИТЬ ЗАКАЗ
             </Link>
             <p className="text-[10px] text-gray-400 text-center leading-relaxed">
-              Оплата картой или ЕРИП. Предзаказ — полная оплата со скидкой.
+              Оформление заказа — через Telegram.
             </p>
           </div>
         )}

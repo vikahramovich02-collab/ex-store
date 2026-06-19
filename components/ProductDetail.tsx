@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowLeft, Check } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
+import { telegramOrderUrl } from "@/lib/order";
 import { finalPrice, type Product } from "@/lib/data";
 
 const typeBg: Record<string, string> = {
@@ -37,6 +38,15 @@ export default function ProductDetail({ product }: { product: Product }) {
       qty: 1,
       preorder: product.preorder,
     });
+  };
+
+  const orderInTelegram = () => {
+    if (!size) {
+      setError(true);
+      return;
+    }
+    const text = `Здравствуйте! Хочу заказать на сайте ex:\n• ${product.name} — размер ${size} — ${price} BYN`;
+    window.open(telegramOrderUrl(text), "_blank");
   };
 
   return (
@@ -134,12 +144,18 @@ export default function ProductDetail({ product }: { product: Product }) {
             Таблица размеров
           </Link>
 
-          {/* Add to cart */}
+          {/* Заказ */}
+          <button
+            onClick={orderInTelegram}
+            className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-gray-900 transition-colors mb-2"
+          >
+            ЗАКАЗАТЬ В TELEGRAM
+          </button>
           <button
             onClick={onAdd}
-            className="btn-glitch w-full justify-center bg-black text-white text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-gray-900 transition-colors mb-6"
+            className="btn-glitch w-full justify-center border border-black text-black text-[11px] tracking-[0.2em] font-medium py-4 hover:bg-black hover:text-white transition-colors mb-6"
           >
-            {product.preorder ? "ОФОРМИТЬ ПРЕДЗАКАЗ" : "ДОБАВИТЬ В КОРЗИНУ"}
+            ДОБАВИТЬ В КОРЗИНУ
           </button>
 
           {/* Description */}
