@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { ArrowLeft, Plus, Minus } from "lucide-react";
+import { useState, useEffect } from "react";
+import { ArrowLeft, Plus, Minus, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from "@/lib/cart-context";
 import ProductMiniCard from "@/components/ProductMiniCard";
 import { telegramOrderUrl } from "@/lib/order";
@@ -13,6 +13,7 @@ export default function ProductDetail({ product }: { product: Product }) {
   const { add } = useCart();
   const [size, setSize] = useState<string | null>(null);
   const [error, setError] = useState(false);
+  const [lightbox, setLightbox] = useState<number | null>(null);
   const price = finalPrice(product);
 
   const related = products.filter((p) => p.gender === product.gender && p.id !== product.id);
@@ -38,13 +39,15 @@ export default function ProductDetail({ product }: { product: Product }) {
       </Link>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-8 items-start">
-        {/* Left: фото-галерея (скроллится) */}
+        {/* Left: фото-галерея (скроллится, клик → увеличить) */}
         <div className="space-y-2">
           {product.images.map((img, i) => (
-            <div
+            <button
               key={i}
-              className="aspect-[3/4] w-full bg-gray-100 bg-cover bg-center"
+              onClick={() => setLightbox(i)}
+              className="block w-full aspect-[3/4] bg-gray-100 bg-cover bg-center cursor-zoom-in"
               style={{ backgroundImage: `url(${asset(img)})` }}
+              aria-label={`Увеличить фото ${i + 1}`}
             />
           ))}
         </div>
@@ -119,6 +122,100 @@ export default function ProductDetail({ product }: { product: Product }) {
           </div>
         </section>
       )}
+
+      {lightbox !== null && (
+        <Lightbox
+          images={product.images}
+          index={lightbox}
+          setIndex={setLightbox}
+          onClose={() => setLightbox(null)}
+        />
+      )}
+    </div>
+  );
+}
+
+function Lightbox({
+  images,
+  index,
+  setIndex,
+  onClose,
+}: {
+  images: string[];
+  index: number;
+  setIndex: (i: number) => void;
+  onClose: () => void;
+}) {
+  const go = (d: number) => setIndex((index + d + images.length) % images.length);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "ArrowRight") setIndex((index + 1) % images.length);
+      if (e.key === "ArrowLeft") setIndex((index - 1 + images.length) % images.length);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [index, images.length, onClose, setIndex]);
+
+  return (
+    <div className="fixed inset-0 z-[60] bg-white flex">
+      {/* Превью-плашки слева */}
+      {images.length > 1 && (
+        <div className="hidden md:flex flex-col gap-2 p-4 overflow-y-auto w-[92px] shrink-0">
+          {images.map((img, i) => (
+            <button
+              key={i}
+              onClick={() => setIndex(i)}
+              className={`aspect-[3/4] bg-gray-100 bg-cover bg-center transition-opacity ${
+                i === index ? "ring-1 ring-black" : "opacity-60 hover:opacity-100"
+              }`}
+              style={{ backgroundImage: `url(${asset(img)})` }}
+              aria-label={`Фото ${i + 1}`}
+            />
+          ))}
+        </div>
+      )}
+
+      {/* Большое фото */}
+      <div className="relative flex-1 flex items-center justify-center p-4 md:p-10">
+        <div
+          className="w-full h-full bg-contain bg-center bg-no-repeat"
+          style={{ backgroundImage: `url(${asset(images[index])})`, backgroundColor: "#f4f4f4" }}
+        />
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={() => go(-1)}
+              className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-sm"
+              aria-label="Предыдущее"
+            >
+              <ChevronLeft size={20} />
+            </button>
+            <button
+              onClick={() => go(1)}
+              className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 flex items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-sm"
+              aria-label="Следующее"
+            >
+              <ChevronRight size={20} />
+            </button>
+          </>
+        )}
+      </div>
+
+      {/* Закрыть */}
+      <button
+        onClick={onClose}
+        className="absolute top-4 right-4 md:top-6 md:right-6 w-10 h-10 flex items-center justify-center hover:bg-gray-100 rounded-full"
+        aria-label="Закрыть"
+      >
+        <X size={22} strokeWidth={1.5} />
+      </button>
     </div>
   );
 }
